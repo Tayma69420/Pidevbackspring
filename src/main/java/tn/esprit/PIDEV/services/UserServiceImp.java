@@ -1,7 +1,6 @@
 package tn.esprit.PIDEV.services;
 
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
@@ -12,14 +11,15 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 import tn.esprit.PIDEV.entities.ERole;
+import tn.esprit.PIDEV.entities.PasswordResetToken;
 import tn.esprit.PIDEV.entities.Role;
 import tn.esprit.PIDEV.entities.User;
 import tn.esprit.PIDEV.payload.request.LoginRequest;
 import tn.esprit.PIDEV.payload.request.SignupRequest;
 import tn.esprit.PIDEV.payload.response.MessageResponse;
 import tn.esprit.PIDEV.payload.response.UserInfoResponse;
+import tn.esprit.PIDEV.repositories.PasswordResetTokenRepository;
 import tn.esprit.PIDEV.repositories.RoleRepository;
 import tn.esprit.PIDEV.repositories.UserRepository;
 import tn.esprit.PIDEV.security.jwt.JwtUtils;
@@ -35,6 +35,8 @@ import java.util.stream.Collectors;
 public class UserServiceImp implements IUserService{
 
     JwtUtils jwtUtils;
+
+    PasswordResetTokenRepository passwordTokenRepository;
 
     AuthenticationManager authenticationManager;
 
@@ -125,5 +127,14 @@ public class UserServiceImp implements IUserService{
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString())
                 .body(new MessageResponse("You've been signed out!"));
 
+    }
+    @Override
+    public void createPasswordResetTokenForUser(final User user, final String token) {
+        final PasswordResetToken myToken = new PasswordResetToken(token, user);
+        passwordTokenRepository.save(myToken);
+    }
+    @Override
+    public User findUserByEmail(final String email) {
+        return userRepository.findByEmail(email);
     }
 }
