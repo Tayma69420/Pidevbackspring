@@ -18,4 +18,5 @@ public class UserInfoResponse {
     private String tel;
     private String image;
     private List<String> roles;
+
 }

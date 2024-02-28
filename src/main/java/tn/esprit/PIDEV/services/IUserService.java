@@ -5,6 +5,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import tn.esprit.PIDEV.entities.User;
 import tn.esprit.PIDEV.payload.request.LoginRequest;
 import tn.esprit.PIDEV.payload.request.SignupRequest;
+import tn.esprit.PIDEV.payload.request.UserInfoRequest;
+import tn.esprit.PIDEV.payload.response.UserInfoResponse;
+
+import java.util.List;
 
 public interface IUserService {
     public ResponseEntity<?> authenticateUser( LoginRequest loginRequest);
@@ -14,4 +18,11 @@ public interface IUserService {
     void createPasswordResetTokenForUser(User user, String token);
 
     User findUserByEmail(String email);
+
+    List<UserInfoResponse> getAllUsersInfo();
+
+    ResponseEntity<?> modifyUserDetails(Long userId, UserInfoRequest userInfoRequest);
+
+
+    ResponseEntity<?> deleteUser(Long userId);
 }

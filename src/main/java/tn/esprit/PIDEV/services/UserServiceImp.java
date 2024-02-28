@@ -17,6 +17,7 @@ import tn.esprit.PIDEV.entities.Role;
 import tn.esprit.PIDEV.entities.User;
 import tn.esprit.PIDEV.payload.request.LoginRequest;
 import tn.esprit.PIDEV.payload.request.SignupRequest;
+import tn.esprit.PIDEV.payload.request.UserInfoRequest;
 import tn.esprit.PIDEV.payload.response.MessageResponse;
 import tn.esprit.PIDEV.payload.response.UserInfoResponse;
 import tn.esprit.PIDEV.repositories.PasswordResetTokenRepository;
@@ -25,9 +26,7 @@ import tn.esprit.PIDEV.repositories.UserRepository;
 import tn.esprit.PIDEV.security.jwt.JwtUtils;
 import tn.esprit.PIDEV.security.services.UserDetailsImpl;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -137,4 +136,50 @@ public class UserServiceImp implements IUserService{
     public User findUserByEmail(final String email) {
         return userRepository.findByEmail(email);
     }
+
+    @Override
+    public List<UserInfoResponse> getAllUsersInfo() {
+        List<User> users = userRepository.findAll();
+        return users.stream()
+                .map(user -> new UserInfoResponse(
+                        user.getId(),
+                        user.getUsername(),
+                        user.getEmail(),
+                        user.getTel(),
+                        user.getImage(),
+                        new ArrayList<>(user.getRoles().stream().map(role -> role.getName().toString()).collect(Collectors.toList()))
+                ))
+                .collect(Collectors.toList());
+    }
+    @Override
+    public ResponseEntity<?> modifyUserDetails(Long userId, UserInfoRequest userInfoRequest) {
+        Optional<User> optionalUser = userRepository.findById(userId);
+        if (optionalUser.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        User user = optionalUser.get();
+
+        user.setUsername(userInfoRequest.getUsername());
+        user.setEmail(userInfoRequest.getEmail());
+        user.setTel(userInfoRequest.getTel());
+        user.setImage(userInfoRequest.getImage());
+
+        userRepository.save(user);
+
+        return ResponseEntity.ok(new MessageResponse("User details updated successfully!"));
+    }
+
+    @Override
+    public ResponseEntity<?> deleteUser(Long userId) {
+        Optional<User> optionalUser = userRepository.findById(userId);
+        if (optionalUser.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        userRepository.deleteById(userId);
+
+        return ResponseEntity.ok(new MessageResponse("User deleted successfully!"));
+    }
+
 }

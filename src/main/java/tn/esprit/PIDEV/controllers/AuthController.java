@@ -8,13 +8,11 @@ import java.util.stream.Collectors;
 
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import tn.esprit.PIDEV.payload.request.LoginRequest;
 import tn.esprit.PIDEV.payload.request.SignupRequest;
+import tn.esprit.PIDEV.payload.request.UserInfoRequest;
+import tn.esprit.PIDEV.payload.response.UserInfoResponse;
 import tn.esprit.PIDEV.services.UserServiceImp;
 
 
@@ -40,4 +38,20 @@ public class AuthController {
     public ResponseEntity<?> registerUser( @RequestBody SignupRequest signUpRequest) {
         return userServiceImp.registerUser(signUpRequest);
     }
+    @GetMapping("/allUsersInfo")
+    public ResponseEntity<List<UserInfoResponse>> getAllUsersInfo() {
+        List<UserInfoResponse> usersInfo = userServiceImp.getAllUsersInfo();
+        return ResponseEntity.ok(usersInfo);
+    }
+    @PutMapping("/modifyUserDetails/{userId}")
+    public ResponseEntity<?> modifyUserDetails(@PathVariable Long userId, @RequestBody UserInfoRequest userInfoRequest) {
+        ResponseEntity<?> response = userServiceImp.modifyUserDetails(userId, userInfoRequest);
+        return response;
+    }
+    @DeleteMapping("/deleteUser/{userId}")
+    public ResponseEntity<?> deleteUser(@PathVariable Long userId) {
+        ResponseEntity<?> response = userServiceImp.deleteUser(userId);
+        return response;
+    }
+
 }
