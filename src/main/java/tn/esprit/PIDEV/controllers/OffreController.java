@@ -11,6 +11,7 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600, allowCredentials="true")
+@RequestMapping("/api/auth")
 public class OffreController {
 
     private IOffreService iOffreService;
@@ -36,6 +37,11 @@ public class OffreController {
     @DeleteMapping("/supprimerOffre/{idOffre}")
     public void deleteOffre(@PathVariable long idOffre){
         iOffreService.deleteOffre(idOffre);
+    }
+
+    @PostMapping("/addOffreAndAssignOffreToUser/{idUser}" )
+    public Offre addOffreAndAssignOffreToUser (@RequestBody Offre offre , @PathVariable long idUser) {
+        return iOffreService.addOffreAndAssignOffreToUser(idUser , offre);
     }
 
 }

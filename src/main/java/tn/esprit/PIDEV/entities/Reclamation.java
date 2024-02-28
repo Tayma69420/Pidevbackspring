@@ -25,12 +25,12 @@ public class Reclamation implements Serializable{
 
     private String titre;
 
-    private String Description;
+    private String description;
 
     private boolean status;
 
-    @Lob
-    private byte[] image;
+
+    private String image;
 
     @JsonIgnore
     @ManyToOne

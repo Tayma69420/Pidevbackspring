@@ -1,5 +1,8 @@
 package tn.esprit.PIDEV.security;
 
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,17 +16,22 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
 import tn.esprit.PIDEV.security.jwt.AuthEntryPointJwt;
 import tn.esprit.PIDEV.security.jwt.AuthTokenFilter;
 import tn.esprit.PIDEV.security.services.UserDetailsServiceImpl;
 
+import java.util.Arrays;
+import java.util.Collections;
+
 @Configuration
 @EnableMethodSecurity
+@AllArgsConstructor
 public class WebSecurityConfig {
-    @Autowired
+
     UserDetailsServiceImpl userDetailsService;
 
-    @Autowired
+
     private AuthEntryPointJwt unauthorizedHandler;
 
     @Bean
@@ -56,6 +64,15 @@ public class WebSecurityConfig {
         http.csrf(csrf -> csrf.disable())
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .cors(cors -> {
+                    cors.configurationSource(request -> {
+                        CorsConfiguration corsConfiguration = new CorsConfiguration();
+                        corsConfiguration.setAllowedOrigins(Collections.singletonList("*"));
+                        corsConfiguration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+                        corsConfiguration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
+                        return corsConfiguration;
+                    });
+                })
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers("/api/auth/**").permitAll()
                                 .anyRequest().authenticated()
@@ -67,4 +84,6 @@ public class WebSecurityConfig {
 
         return http.build();
     }
+
+
 }
