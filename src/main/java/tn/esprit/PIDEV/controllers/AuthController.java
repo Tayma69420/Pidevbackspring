@@ -53,5 +53,18 @@ public class AuthController {
         ResponseEntity<?> response = userServiceImp.deleteUser(userId);
         return response;
     }
+    @GetMapping("/getPassword/{userId}")
+    public ResponseEntity<?> getUserPassword(@PathVariable Long userId) {
+        String password = userServiceImp.getUserPassword(userId);
+        if (password == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(password);
+    }
 
+    @PutMapping("/changePassword/{userId}")
+    public ResponseEntity<?> changeUserPassword(@PathVariable Long userId, @RequestBody String newPassword) {
+        ResponseEntity<?> response = userServiceImp.changeUserPassword(userId, newPassword);
+        return response;
+    }
 }

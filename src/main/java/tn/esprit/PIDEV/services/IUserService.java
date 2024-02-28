@@ -25,4 +25,9 @@ public interface IUserService {
 
 
     ResponseEntity<?> deleteUser(Long userId);
+
+
+    String getUserPassword(Long userId);
+
+    ResponseEntity<?> changeUserPassword(Long userId, String newPassword);
 }

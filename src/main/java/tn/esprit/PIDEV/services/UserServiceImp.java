@@ -153,6 +153,7 @@ public class UserServiceImp implements IUserService{
     }
     @Override
     public ResponseEntity<?> modifyUserDetails(Long userId, UserInfoRequest userInfoRequest) {
+
         Optional<User> optionalUser = userRepository.findById(userId);
         if (optionalUser.isEmpty()) {
             return ResponseEntity.notFound().build();
@@ -180,6 +181,33 @@ public class UserServiceImp implements IUserService{
         userRepository.deleteById(userId);
 
         return ResponseEntity.ok(new MessageResponse("User deleted successfully!"));
+    }
+
+    @Override
+    public String getUserPassword(Long userId) {
+        Optional<User> optionalUser = userRepository.findById(userId);
+        if (optionalUser.isEmpty()) {
+            return null;
+        }
+
+        User user = optionalUser.get();
+        return user.getPassword();
+    }
+
+    @Override
+    public ResponseEntity<?> changeUserPassword(Long userId, String newPassword) {
+        Optional<User> optionalUser = userRepository.findById(userId);
+        if (optionalUser.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        User user = optionalUser.get();
+
+        String encryptedPassword = encoder.encode(newPassword);
+        user.setPassword(encryptedPassword);
+        userRepository.save(user);
+
+        return ResponseEntity.ok(new MessageResponse("Password changed successfully!"));
     }
 
 }
