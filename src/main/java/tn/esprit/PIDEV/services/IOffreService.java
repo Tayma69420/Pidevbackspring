@@ -10,6 +10,7 @@ public interface IOffreService {
     public Offre getOffreById(long idOffre);
     public void deleteOffre(long idOffre);
     public Offre updateOffre(Offre o);
+    public Offre addOffreAndAssignOffreToUser (long idUser , Offre offre);
 
 }
 

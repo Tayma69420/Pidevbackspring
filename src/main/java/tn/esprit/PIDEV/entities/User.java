@@ -25,9 +25,11 @@ public class User implements Serializable {
     private String tel;
     private String image;
 
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private Set<Candidature> candidatures;
 
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private Set<Offre> offres;
 

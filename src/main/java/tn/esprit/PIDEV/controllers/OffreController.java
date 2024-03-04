@@ -7,10 +7,11 @@ import tn.esprit.PIDEV.entities.Offre;
 import tn.esprit.PIDEV.services.IOffreService;
 
 import java.util.List;
+@AllArgsConstructor
 
 @RestController
-@AllArgsConstructor
-@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600, allowCredentials="true")
+@CrossOrigin(origins = "http://localhost:4200/", maxAge = 3600, allowCredentials="true")
+@RequestMapping("/api/auth")
 public class OffreController {
 
     private IOffreService iOffreService;
@@ -37,5 +38,8 @@ public class OffreController {
     public void deleteOffre(@PathVariable long idOffre){
         iOffreService.deleteOffre(idOffre);
     }
-
+    @PostMapping(value="/addOffreAndAssignOffreToUser/{idUser}" )
+    public Offre addOffreAndAssignOffreToUser (@RequestBody Offre offre , @PathVariable long idUser) {
+        return iOffreService.addOffreAndAssignOffreToUser(idUser , offre);
+    }
 }

@@ -18,8 +18,8 @@ import tn.esprit.PIDEV.payload.request.SignupRequest;
 import tn.esprit.PIDEV.services.UserServiceImp;
 
 
-@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600, allowCredentials="true")
 @RestController
+@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600, allowCredentials="true")
 @RequestMapping("/api/auth")
 @AllArgsConstructor
 public class AuthController {

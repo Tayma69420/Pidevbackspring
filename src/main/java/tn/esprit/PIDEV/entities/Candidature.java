@@ -19,24 +19,21 @@ public class Candidature implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long idCondidature ;
+    private long idCandidature ;
 
-    @Lob
-    private byte[] lettreDeMotivation;
 
-    @Lob
-    private byte [] cv;
+    private String experience;
+
+    private String formation;
+    private String competence;
+    private String langues;
 
     private LocalDateTime dateDeCandidature;
 
     @Enumerated(EnumType.STRING)
     private Status status;
-
-    @JsonIgnore
     @ManyToOne
     private User user;
-
-    @JsonIgnore
     @ManyToOne
     private Offre offre;
 }

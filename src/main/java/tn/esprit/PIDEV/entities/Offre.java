@@ -30,6 +30,7 @@ public class Offre implements Serializable {
 
     private  int nbPlaces;
 
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "offre")
     private Set<Candidature> candidaturess;
 
