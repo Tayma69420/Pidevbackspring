@@ -3,27 +3,32 @@ package tn.esprit.PIDEV.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
-import java.io.Serializable;
-import java.util.HashSet;
+import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 @Setter
 @Getter
+@Builder
 @Table(name = "users")
-public class User implements Serializable {
+public class User implements  UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String username;
-    private String email;
-    private String password;
-    private String tel;
-    private String image;
+    public Long id;
+    public String username;
+    public String email;
+    public String password;
+    public String tel;
+    public String image;
+    public ERole role ;
+    public boolean activated = true ;
 
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
@@ -33,27 +38,50 @@ public class User implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private Set<Offre> offres;
 
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private Set<Reclamation> reclamations;
 
+    @JsonIgnore
     @ManyToMany(cascade = CascadeType.ALL)
     private Set<Session> sessions;
 
+    @JsonIgnore
     @ManyToMany(cascade = CascadeType.ALL)
     private Set<Messagerie> messageries;
 
-    @ManyToMany
-    @JoinTable(name = "user_roles",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> roles = new HashSet<>();
-    public User(String username, String email, String password,String tel,String image) {
 
-        this.username = username;
-        this.email = email;
-        this.password = password;
-        this.tel=tel;
-        this.image=image;
+
+    @Override
+    public String getUsername() {
+        return username;
+    }
+
+
+    @JsonIgnore
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(role.name()));
+    }
+
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 
 

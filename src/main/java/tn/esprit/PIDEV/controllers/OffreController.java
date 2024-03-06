@@ -7,11 +7,11 @@ import tn.esprit.PIDEV.entities.Offre;
 import tn.esprit.PIDEV.services.IOffreService;
 
 import java.util.List;
-@AllArgsConstructor
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200/", maxAge = 3600, allowCredentials="true")
-@RequestMapping("/api/auth")
+@AllArgsConstructor
+@RequestMapping("/api/v1/auth")
+@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600, allowCredentials="true")
 public class OffreController {
 
     private IOffreService iOffreService;
@@ -38,8 +38,13 @@ public class OffreController {
     public void deleteOffre(@PathVariable long idOffre){
         iOffreService.deleteOffre(idOffre);
     }
-    @PostMapping(value="/addOffreAndAssignOffreToUser/{idUser}" )
-    public Offre addOffreAndAssignOffreToUser (@RequestBody Offre offre , @PathVariable long idUser) {
-        return iOffreService.addOffreAndAssignOffreToUser(idUser , offre);
+
+    @GetMapping("/getMyOffres/{id}")
+    public List<Offre> getOffresByUserId(@PathVariable Long id){return iOffreService.getOffresByUserId(id);}
+
+    @PostMapping("/addOffreAndAssignToUserAndToSession/{idUser}/{idSession}")
+    public Offre addOffreAndAssignToUserAndToSession(@PathVariable Long idUser,@RequestBody Offre o,@PathVariable Long idSession){
+        return iOffreService.addOffreAndAssignToUserAndToSession(idUser,o,idSession);
     }
+
 }

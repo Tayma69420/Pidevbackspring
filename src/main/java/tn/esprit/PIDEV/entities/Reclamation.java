@@ -29,10 +29,10 @@ public class Reclamation implements Serializable{
 
     private boolean status;
 
-    @Lob
-    private byte[] image;
 
-    @JsonIgnore
+    private String image;
+
+
     @ManyToOne
     private User user;
 }

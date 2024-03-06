@@ -1,11 +1,10 @@
 package tn.esprit.PIDEV.entities;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.security.core.parameters.P;
 
 import java.io.Serializable;
 
@@ -13,7 +12,6 @@ import java.io.Serializable;
 @Setter
 @Getter
 @NoArgsConstructor
-@ToString
 public class Materiel implements Serializable{
 
     @Id
@@ -23,8 +21,9 @@ public class Materiel implements Serializable{
     private String intitule;
 
     private int nbPieces;
+    private Pack pack;
 
-    @JsonIgnore
+
     @ManyToOne
     private Session sessions;
 }

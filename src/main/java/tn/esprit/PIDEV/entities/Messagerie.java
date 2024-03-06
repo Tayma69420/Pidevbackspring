@@ -23,6 +23,5 @@ public class Messagerie implements Serializable{
 
 
     @ManyToMany(mappedBy = "messageries",cascade=CascadeType.ALL)
-    @JsonIgnore
     private Set<User> users;
 }

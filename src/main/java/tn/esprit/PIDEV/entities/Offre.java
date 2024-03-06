@@ -15,7 +15,6 @@ import java.util.Set;
 @Setter
 @Getter
 @NoArgsConstructor
-@ToString
 public class Offre implements Serializable {
 
     @Id
@@ -26,15 +25,20 @@ public class Offre implements Serializable {
 
     private String description;
 
+    private String image;
+
     private LocalDateTime dateDeCreation;
 
     private  int nbPlaces;
 
-    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "offre")
+    @JsonIgnore
     private Set<Candidature> candidaturess;
 
-    @JsonIgnore
+
     @ManyToOne
     private User user;
+
+    @ManyToOne
+    private Session sessions;
 }

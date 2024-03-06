@@ -28,10 +28,17 @@ public class Session implements Serializable{
 
     private int nbrDePlaces;
 
-    @JsonIgnore
+
     @ManyToMany(mappedBy = "sessions",cascade = CascadeType.ALL)
     private Set<User> users;
 
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "sessions")
     private Set<Materiel> materiels;
+
+    @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "sessions")
+    private Set<Offre> offres;
+
+
 }
